@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block content %}
+<table>
+    <tr>
+        <th>Herramienta</th>
+        <th>Estado</th>
+        <th>Acción</th>
+    </tr>
+    {% for tool in tools %}
+    <tr>
+        <td>{{ tool.name }}</td>
+        <td>
+            {% if tool.borrowed %}
+                Prestada a {{ tool.borrower }}
+            {% else %}
+                Disponible
+            {% endif %}
+        </td>
+        <td>
+            {% if tool.borrowed %}
+            <form action="{{ url_for('return_tool', tool_id=tool.id) }}" method="post">
+                <button type="submit">Devolver</button>
+            </form>
+            {% else %}
+            <form action="{{ url_for('borrow', tool_id=tool.id) }}" method="post">
+                <input type="text" name="borrower" placeholder="Nombre" required>
+                <button type="submit">Prestar</button>
+            </form>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
